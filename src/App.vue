@@ -1,60 +1,160 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1></h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+    <div>
+        <app-menu></app-menu>
+        <div class="ui grid container">
+            <div class="row">
+                <div class="column"><!-- this row intentionally left blank --></div>
+            </div>
+            <div class="row">
+                <div class="four wide column">
+                    <app-calendar></app-calendar>
+                    <p></p>
+                    <button class="ui olive fluid right labeled icon button">
+                        <i class="plus icon"></i>
+                        Add Food
+                    </button>
+                    <h2>Summary</h2>
+                    <div class="ui statistics">
+                        <div class="statistic">
+                            <div class="value">
+                                <i class="olive food icon"></i>
+                                4265
+                            </div>
+                            <div class="label">
+                                kCal consumed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="twelve wide column">
+                    <h2>Breakfast</h2>
+                    <table class="ui small compact orange celled table">
+                        <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories (kcal)</th>
+                            <th>Carbs (g)</th>
+                            <th>Fat (g)</th>
+                            <th>Protein (g)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Chicken Steak</td>
+                            <td>338</td>
+                            <td>28</td>
+                            <td>3</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>Chicken Steak</td>
+                            <td>338</td>
+                            <td>28</td>
+                            <td>3</td>
+                            <td>8</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>338</th>
+                            <th>28</th>
+                            <th>3</th>
+                            <th>8</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <h2>Lunch</h2>
+                    <table class="ui small compact orange celled table">
+                        <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories (kcal)</th>
+                            <th>Carbs (g)</th>
+                            <th>Fat (g)</th>
+                            <th>Protein (g)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Chicken Steak</td>
+                            <td>338</td>
+                            <td>28</td>
+                            <td>3</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>Chicken Steak</td>
+                            <td>338</td>
+                            <td>28</td>
+                            <td>3</td>
+                            <td>8</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>338</th>
+                            <th>28</th>
+                            <th>3</th>
+                            <th>8</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <h2>Dinner</h2>
+                    <table class="ui small compact orange celled table">
+                        <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories (kcal)</th>
+                            <th>Carbs (g)</th>
+                            <th>Fat (g)</th>
+                            <th>Protein (g)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Chicken Steak</td>
+                            <td>338</td>
+                            <td>28</td>
+                            <td>3</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>Chicken Steak</td>
+                            <td>338</td>
+                            <td>28</td>
+                            <td>3</td>
+                            <td>8</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>338</th>
+                            <th>28</th>
+                            <th>3</th>
+                            <th>8</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import Calendar from './Calendar.vue';
+import Menu from './Menu.vue';
+
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    components: {
+        'app-menu': Menu,
+        'app-calendar': Calendar
+    },
+    mounted() {
+
     }
-  }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>
