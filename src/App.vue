@@ -8,11 +8,7 @@
             <div class="row">
                 <div class="four wide column">
                     <app-calendar></app-calendar>
-                    <p></p>
-                    <button class="ui olive fluid right labeled icon button">
-                        <i class="plus icon"></i>
-                        Add Food
-                    </button>
+                    <app-add-food-button></app-add-food-button>
                     <h2>Summary</h2>
                     <div class="ui statistics">
                         <div class="statistic">
@@ -145,16 +141,15 @@
 </template>
 
 <script>
+import AddFoodButton from './AddFoodButton.vue';
 import Calendar from './Calendar.vue';
 import Menu from './Menu.vue';
 
 export default {
     components: {
         'app-menu': Menu,
-        'app-calendar': Calendar
+        'app-calendar': Calendar,
+        'app-add-food-button': AddFoodButton
     },
-    mounted() {
-
-    }
 }
 </script>
