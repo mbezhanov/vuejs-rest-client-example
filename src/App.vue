@@ -9,131 +9,10 @@
                 <div class="four wide column">
                     <app-calendar></app-calendar>
                     <app-add-food-button></app-add-food-button>
-                    <h2>Summary</h2>
-                    <div class="ui statistics">
-                        <div class="statistic">
-                            <div class="value">
-                                <i class="olive food icon"></i>
-                                4265
-                            </div>
-                            <div class="label">
-                                kCal consumed
-                            </div>
-                        </div>
-                    </div>
+                    <app-calories-counter></app-calories-counter>
                 </div>
                 <div class="twelve wide column">
-                    <h2>Breakfast</h2>
-                    <table class="ui small compact orange celled table">
-                        <thead>
-                        <tr>
-                            <th>Food</th>
-                            <th>Calories (kcal)</th>
-                            <th>Carbs (g)</th>
-                            <th>Fat (g)</th>
-                            <th>Protein (g)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Chicken Steak</td>
-                            <td>338</td>
-                            <td>28</td>
-                            <td>3</td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td>Chicken Steak</td>
-                            <td>338</td>
-                            <td>28</td>
-                            <td>3</td>
-                            <td>8</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Total</th>
-                            <th>338</th>
-                            <th>28</th>
-                            <th>3</th>
-                            <th>8</th>
-                        </tr>
-                        </tfoot>
-                    </table>
-                    <h2>Lunch</h2>
-                    <table class="ui small compact orange celled table">
-                        <thead>
-                        <tr>
-                            <th>Food</th>
-                            <th>Calories (kcal)</th>
-                            <th>Carbs (g)</th>
-                            <th>Fat (g)</th>
-                            <th>Protein (g)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Chicken Steak</td>
-                            <td>338</td>
-                            <td>28</td>
-                            <td>3</td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td>Chicken Steak</td>
-                            <td>338</td>
-                            <td>28</td>
-                            <td>3</td>
-                            <td>8</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Total</th>
-                            <th>338</th>
-                            <th>28</th>
-                            <th>3</th>
-                            <th>8</th>
-                        </tr>
-                        </tfoot>
-                    </table>
-                    <h2>Dinner</h2>
-                    <table class="ui small compact orange celled table">
-                        <thead>
-                        <tr>
-                            <th>Food</th>
-                            <th>Calories (kcal)</th>
-                            <th>Carbs (g)</th>
-                            <th>Fat (g)</th>
-                            <th>Protein (g)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Chicken Steak</td>
-                            <td>338</td>
-                            <td>28</td>
-                            <td>3</td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td>Chicken Steak</td>
-                            <td>338</td>
-                            <td>28</td>
-                            <td>3</td>
-                            <td>8</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Total</th>
-                            <th>338</th>
-                            <th>28</th>
-                            <th>3</th>
-                            <th>8</th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                    <app-food-diary></app-food-diary>
                 </div>
             </div>
         </div>
@@ -141,15 +20,19 @@
 </template>
 
 <script>
+import Menu from './Menu.vue';
 import AddFoodButton from './AddFoodButton.vue';
 import Calendar from './Calendar.vue';
-import Menu from './Menu.vue';
+import CaloriesCounter from './CaloriesCounter.vue';
+import FoodDiary from './FoodDiary.vue';
 
 export default {
     components: {
         'app-menu': Menu,
         'app-calendar': Calendar,
-        'app-add-food-button': AddFoodButton
+        'app-add-food-button': AddFoodButton,
+        'app-calories-counter': CaloriesCounter,
+        'app-food-diary': FoodDiary
     },
 }
 </script>
