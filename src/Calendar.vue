@@ -28,7 +28,7 @@
                             disabled: calendarDate.month() != selectedCalendarDate.month(),
                             today: calendarDate.isSame(today, 'day'),
                             range: loggedDates.indexOf(calendarDate.format('YYYY-MM-DD')) !== -1,
-                            focus: calendarDate.isSame(selectedCalendarDate)
+                            focus: calendarDate.isSame(selectedCalendarDate, 'day')
                         }"
                         :data-moment="calendarDate.format('YYYY-MM-DD')"
                         @click="handleDateClick"
@@ -101,21 +101,20 @@ export default {
             this.calendarDates = chunk(calendarDates, cols);
         },
         loadPreviousMonth() {
-            this.$store.state.selectedCalendarDate = this.selectedCalendarDate.subtract(1, 'months');
-            this.renderCalendar(this.selectedCalendarDate);
+            this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate).subtract(1, 'months'));
         },
         loadNextMonth() {
-            this.$store.state.selectedCalendarDate = this.selectedCalendarDate.add(1, 'months');
-            this.renderCalendar(this.selectedCalendarDate);
+            this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate).add(1, 'months'));
         },
         handleDateClick(e) {
             this.$store.state.selectedCalendarDate = moment(e.currentTarget.dataset.moment);
         }
     },
-    created() {
-        this.$store.commit('setSelectedCalendarDate', moment(this.today));
-        this.renderCalendar(this.today);
-    }
+    watch: {
+        selectedCalendarDate(date) {
+            this.renderCalendar(date);
+        }
+    },
 }
 </script>
 

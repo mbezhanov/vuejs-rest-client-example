@@ -48,6 +48,9 @@ export default {
         onTotalCaloriesCountChange(totalCaloriesConsumed) {
             this.totalCaloriesConsumed = totalCaloriesConsumed;
         }
+    },
+    mounted() {
+        this.$store.commit('setSelectedCalendarDate', moment());
     }
 }
 </script>

@@ -1,10 +1,11 @@
+import moment from 'moment';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
 const state = {
-    selectedCalendarDate: ''
+    selectedCalendarDate: moment()
 };
 
 const getters = {
