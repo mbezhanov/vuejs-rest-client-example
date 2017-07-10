@@ -4,7 +4,11 @@
         <table class="ui celled center aligned unstackable olive table seven column day">
             <thead>
                 <tr>
-                    <th colspan="7"><span class="link">July 2017</span><span class="prev link"><i class="chevron left icon"></i></span><span class="next link"><i class="chevron right icon"></i></span></th>
+                    <th colspan="7">
+                        <span class="link">{{ selectedCalendarDate.format('MMMM YYYY') }} </span>
+                        <span class="prev link" @click="loadPreviousMonth"><i class="chevron left icon"></i></span>
+                        <span class="next link" @click="loadNextMonth"><i class="chevron right icon"></i></span>
+                    </th>
                 </tr>
                 <tr>
                     <th>S</th>
@@ -22,7 +26,7 @@
                         class="link"
                         :class="{
                             disabled: calendarDate.month() != selectedCalendarDate.month(),
-                            today: calendarDate.isSame(selectedCalendarDate, 'day'),
+                            today: calendarDate.isSame(today, 'day'),
                             range: loggedDates.indexOf(calendarDate.format('YYYY-MM-DD')) !== -1,
                             focus: calendarDate.isSame(selectedCalendarDate)
                         }"
@@ -45,6 +49,7 @@ import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
+            today: moment(),
             loggedDates: [],
             calendarDates: []
         }
@@ -55,8 +60,8 @@ export default {
         })
     },
     methods: {
-        renderCalendar(today) {
-            this.$http.get(`diary/logged-dates/${today.year()}/${today.format('MM')}`).then(response => {
+        renderCalendar(selectedDate) {
+            this.$http.get(`diary/logged-dates/${selectedDate.year()}/${selectedDate.format('MM')}`).then(response => {
                 const loggedDates = [];
 
                 for (let item of response.body._embedded.items) {
@@ -67,10 +72,10 @@ export default {
 
             const rows = 6;
             const cols = 7;
-            const firstDayOfThisMonth = moment().startOf('month');
-            const lastDayOfThisMonth = moment().endOf('month');
+            const firstDayOfThisMonth = moment(selectedDate).startOf('month');
+            const lastDayOfThisMonth = moment(selectedDate).endOf('month');
             const daysFromPreviousMonth = firstDayOfThisMonth.day();
-            const daysFromNextMonth = (rows * cols) - (today.daysInMonth() + daysFromPreviousMonth);
+            const daysFromNextMonth = (rows * cols) - (selectedDate.daysInMonth() + daysFromPreviousMonth);
 
             let calendarDates = [];
             let currentDate = moment(firstDayOfThisMonth).subtract('1', 'days');
@@ -95,14 +100,21 @@ export default {
 
             this.calendarDates = chunk(calendarDates, cols);
         },
+        loadPreviousMonth() {
+            this.$store.state.selectedCalendarDate = this.selectedCalendarDate.subtract(1, 'months');
+            this.renderCalendar(this.selectedCalendarDate);
+        },
+        loadNextMonth() {
+            this.$store.state.selectedCalendarDate = this.selectedCalendarDate.add(1, 'months');
+            this.renderCalendar(this.selectedCalendarDate);
+        },
         handleDateClick(e) {
             this.$store.state.selectedCalendarDate = moment(e.currentTarget.dataset.moment);
         }
     },
     created() {
-        const currentDate = moment();
-        this.$store.state.selectedCalendarDate = currentDate;
-        this.renderCalendar(currentDate);
+        this.$store.state.selectedCalendarDate = moment(this.today);
+        this.renderCalendar(this.today);
     }
 }
 </script>
