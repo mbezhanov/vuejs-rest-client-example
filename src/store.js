@@ -15,6 +15,9 @@ const actions = {
 };
 
 const mutations = {
+    setSelectedCalendarDate(state, date) {
+        state.selectedCalendarDate = date;
+    }
 };
 
 export default new Vuex.Store({

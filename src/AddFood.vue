@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="add-food">
         <p></p>
         <button class="ui olive fluid right labeled icon button" @click="handleButtonClick">
             <i class="plus icon"></i>
@@ -20,9 +20,9 @@
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Meal</div>
                                 <div class="menu">
-                                    <div class="item" data-value="1">Breakfast</div>
-                                    <div class="item" data-value="2">Lunch</div>
-                                    <div class="item" data-value="3">Dinner</div>
+                                    <div class="item" v-for="meal in meals" :data-value="meal.id" @click="setSelectedMeal(meal)">
+                                        {{ meal.name }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -60,17 +60,27 @@
 
 <script>
 import split from 'lodash/split';
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
         return {
+            meals: [
+                { id: 1, name: 'Breakfast' },
+                { id: 2, name: 'Lunch' },
+                { id: 3, name: 'Dinner' }
+            ],
             foods: [],
-            selectedQuantity: 0,
+            selectedMeal: null,
             selectedFood: null,
+            selectedQuantity: 0,
             jQuery: window.jQuery
         }
     },
     computed: {
+        ...mapGetters({
+            selectedCalendarDate: 'getSelectedCalendarDate'
+        }),
         totalServingSize() {
             const [ servingSize, measurement ] = split(this.selectedFood.serving_size, ' ');
             return (this.selectedQuantity * servingSize) + ' ' + measurement;
@@ -81,7 +91,22 @@ export default {
             this.jQuery('.ui.modal').modal('show');
         },
         handleFormSubmission() {
-            console.log('handle form submission');
+            this.$http.post('diary', {
+                date: this.selectedCalendarDate.format('YYYY-MM-DD'),
+                meal_id: this.selectedMeal.id,
+                food_id: this.selectedFood.id,
+                quantity: this.selectedQuantity
+            }).then(() => {
+                this.selectedMeal = null;
+                this.selectedFood = null;
+                this.selectedQuantity = null;
+                this.jQuery('.ui.modal').modal('hide');
+                this.jQuery('.ui.dropdown').dropdown('clear');
+                this.$emit('foodAdded');
+            });
+        },
+        setSelectedMeal(meal) {
+            this.selectedMeal = meal;
         },
         setSelectedFood(food) {
             this.selectedFood = food;
@@ -94,7 +119,13 @@ export default {
     },
     mounted() {
         this.jQuery('.ui.modal').modal();
-        this.jQuery('.ui.dropdown').dropdown();2
+        this.jQuery('.ui.dropdown').dropdown();
     }
 }
 </script>
+
+<style scoped>
+#add-food {
+    margin-bottom: 14px;
+}
+</style>

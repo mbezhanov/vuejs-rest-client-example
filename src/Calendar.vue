@@ -113,7 +113,7 @@ export default {
         }
     },
     created() {
-        this.$store.state.selectedCalendarDate = moment(this.today);
+        this.$store.commit('setSelectedCalendarDate', moment(this.today));
         this.renderCalendar(this.today);
     }
 }
