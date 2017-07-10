@@ -5,7 +5,7 @@
             <div class="statistic">
                 <div class="value">
                     <i class="olive food icon"></i>
-                    4265
+                    {{ totalCaloriesConsumed }}
                 </div>
                 <div class="label">
                     kCal consumed
@@ -14,3 +14,15 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props: {
+        totalCaloriesConsumed: {
+            type: Number,
+            required: true,
+            default: 0
+        }
+    }
+}
+</script>

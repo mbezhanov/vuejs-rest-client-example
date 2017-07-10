@@ -8,11 +8,11 @@
             <div class="row">
                 <div class="four wide column">
                     <app-calendar></app-calendar>
-                    <app-add-food-button></app-add-food-button>
-                    <app-calories-counter></app-calories-counter>
+                    <app-add-food></app-add-food>
+                    <app-calories-counter :totalCaloriesConsumed="totalCaloriesConsumed"></app-calories-counter>
                 </div>
                 <div class="twelve wide column">
-                    <app-food-diary></app-food-diary>
+                    <app-food-diary @totalCaloriesCountChange="handleTotalCaloriesCountChange"></app-food-diary>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
 
 <script>
 import Menu from './Menu.vue';
-import AddFoodButton from './AddFoodButton.vue';
+import AddFood from './AddFood.vue';
 import Calendar from './Calendar.vue';
 import CaloriesCounter from './CaloriesCounter.vue';
 import FoodDiary from './FoodDiary.vue';
@@ -30,9 +30,19 @@ export default {
     components: {
         'app-menu': Menu,
         'app-calendar': Calendar,
-        'app-add-food-button': AddFoodButton,
+        'app-add-food': AddFood,
         'app-calories-counter': CaloriesCounter,
         'app-food-diary': FoodDiary
     },
+    data() {
+        return {
+            totalCaloriesConsumed: 0
+        }
+    },
+    methods: {
+        handleTotalCaloriesCountChange(totalCaloriesConsumed) {
+            this.totalCaloriesConsumed = totalCaloriesConsumed;
+        }
+    }
 }
 </script>

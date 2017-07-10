@@ -1,8 +1,14 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
 import App from './App.vue';
+import store from './store';
+
+Vue.use(VueResource);
+
+Vue.http.options.root = 'http://app.local:8081/';
 
 new Vue({
-  el: '#app',
-  render: h => h(App)
+    el: '#app',
+    store,
+    render: h => h(App)
 });
