@@ -11,6 +11,7 @@
                         <th>Carbs (g)</th>
                         <th>Fat (g)</th>
                         <th>Protein (g)</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,6 +22,11 @@
                         <td>{{ food.carbs }}</td>
                         <td>{{ food.fat }}</td>
                         <td>{{ food.protein }}</td>
+                        <td class="center aligned">
+                            <a href="#" @click.prevent.stop="onRemoveRequest(food)">
+                                <i class="red remove icon"></i>
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -30,9 +36,29 @@
                         <th>{{ getTotal(mealName, 'carbs') }}</th>
                         <th>{{ getTotal(mealName, 'fat') }}</th>
                         <th>{{ getTotal(mealName, 'protein') }}</th>
+                        <th></th>
                     </tr>
                 </tfoot>
             </table>
+        </div>
+        <div id="confirm-delete-modal" class="ui small basic test modal">
+            <div class="ui icon header">
+                <i class="book icon"></i>
+                Delete Diary Entry
+            </div>
+            <div class="content">
+                <p>Are you sure you want to delete this entry from the diary?</p>
+            </div>
+            <div class="actions">
+                <div class="ui red basic cancel inverted button">
+                    <i class="remove icon"></i>
+                    No
+                </div>
+                <div class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -49,7 +75,8 @@ export default {
                 breakfast: [],
                 lunch: [],
                 dinner: []
-            }
+            },
+            jQuery: window.jQuery
         };
     },
     computed: {
@@ -68,6 +95,7 @@ export default {
 
                 for (let item of response.body._embedded.items) {
                     const food = this.applyQuantityTransformation(item);
+                    food.diary_id = item.id;
                     if (item.meal.id === 1) {
                         breakfast.push(food);
                     } else if (item.meal.id === 2) {
@@ -78,7 +106,7 @@ export default {
                     totalCaloriesConsumed += item.food.calories;
                 }
 
-                this.$emit('totalCaloriesCountChange', totalCaloriesConsumed);
+                this.$emit('caloriesCountChanged', totalCaloriesConsumed);
             });
 
             this.meals.breakfast = breakfast;
@@ -107,6 +135,15 @@ export default {
             item.food.protein *= item.quantity;
 
             return item.food;
+        },
+        onRemoveRequest(food) {
+            jQuery('#confirm-delete-modal').modal('setting', 'closable', false)
+                .modal('setting', 'onApprove', () => {
+                    this.$http.delete(`diary/${food.diary_id}`).then(() => {
+                        this.$emit('diaryEntryRemoved');
+                    });
+                })
+                .modal('show');
         }
     },
 }

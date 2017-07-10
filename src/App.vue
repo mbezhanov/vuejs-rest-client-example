@@ -12,7 +12,11 @@
                     <app-calories-counter :totalCaloriesConsumed="totalCaloriesConsumed"></app-calories-counter>
                 </div>
                 <div class="twelve wide column">
-                    <app-food-diary @totalCaloriesCountChange="onTotalCaloriesCountChange"></app-food-diary>
+                    <app-food-diary
+                        @caloriesCountChanged="onCaloriesCountChanged"
+                        @diaryEntryRemoved="onDiaryEntryRemoved"
+                    >
+                    </app-food-diary>
                 </div>
             </div>
         </div>
@@ -37,20 +41,27 @@ export default {
     },
     data() {
         return {
-            totalCaloriesConsumed: 0
+            totalCaloriesConsumed: 0,
+            jQuery: window.jQuery
         }
     },
     methods: {
+        onDiaryEntryRemoved() {
+            // simulate date change, in order to trigger re-rendering of calendar and diary
+            this.$store.commit('setSelectedCalendarDate', moment(this.$store.state.selectedCalendarDate));
+        },
         onFoodAdded() {
             // simulate date change, in order to trigger re-rendering of calendar and diary
             this.$store.commit('setSelectedCalendarDate', moment(this.$store.state.selectedCalendarDate));
         },
-        onTotalCaloriesCountChange(totalCaloriesConsumed) {
+        onCaloriesCountChanged(totalCaloriesConsumed) {
             this.totalCaloriesConsumed = totalCaloriesConsumed;
         }
     },
     mounted() {
         this.$store.commit('setSelectedCalendarDate', moment());
+        this.jQuery('.ui.modal').modal();
+        this.jQuery('.ui.dropdown').dropdown();
     }
 }
 </script>

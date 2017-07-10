@@ -5,7 +5,7 @@
             <i class="plus icon"></i>
             Add Food
         </button>
-        <div class="ui modal">
+        <div id="add-food-form" class="ui modal">
             <i class="close icon"></i>
             <div class="header">
                 Add Food
@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         handleButtonClick() {
-            this.jQuery('.ui.modal').modal('show');
+            this.jQuery('#add-food-form').modal('show');
         },
         handleFormSubmission() {
             this.$http.post('diary', {
@@ -100,7 +100,7 @@ export default {
                 this.selectedMeal = null;
                 this.selectedFood = null;
                 this.selectedQuantity = null;
-                this.jQuery('.ui.modal').modal('hide');
+                this.jQuery('#add-food-form').modal('hide');
                 this.jQuery('.ui.dropdown').dropdown('clear');
                 this.$emit('foodAdded');
             });
@@ -117,10 +117,6 @@ export default {
             this.foods = response.body._embedded.items;
         });
     },
-    mounted() {
-        this.jQuery('.ui.modal').modal();
-        this.jQuery('.ui.dropdown').dropdown();
-    }
 }
 </script>
 
