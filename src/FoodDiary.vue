@@ -67,7 +67,7 @@ export default {
                 let totalCaloriesConsumed = 0;
 
                 for (let item of response.body._embedded.items) {
-                    const food = item.food;
+                    const food = this.applyQuantityTransformation(item);
                     if (item.meal.id === 1) {
                         breakfast.push(food);
                     } else if (item.meal.id === 2) {
@@ -98,6 +98,15 @@ export default {
         },
         ucfirst(string) {
             return upperFirst(string);
+        },
+        applyQuantityTransformation(item) {
+            item.food.serving_size = `${item.quantity} x ${item.food.serving_size}`;
+            item.food.calories *= item.quantity;
+            item.food.carbs *= item.quantity;
+            item.food.fat *= item.quantity;
+            item.food.protein *= item.quantity;
+
+            return item.food;
         }
     },
 }
