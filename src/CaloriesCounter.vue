@@ -5,7 +5,7 @@
             <div class="statistic">
                 <div class="value">
                     <i class="olive food icon"></i>
-                    {{ totalCaloriesConsumed }}
+                    <app-animated-number :number="totalCaloriesConsumed"></app-animated-number>
                 </div>
                 <div class="label">
                     kCal consumed
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import AnimatedNumber from './AnimatedNumber.vue';
+
 export default {
     props: {
         totalCaloriesConsumed: {
@@ -23,6 +25,9 @@ export default {
             required: true,
             default: 0
         }
+    },
+    components: {
+        'app-animated-number': AnimatedNumber
     }
 }
 </script>
