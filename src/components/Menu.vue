@@ -5,18 +5,18 @@
                 <div class="column">
                     <div class="ui inverted labeled icon menu">
                         <h1 class="header item">Food Tracker</h1>
-                        <a class="item active">
+                        <router-link to="/diary" class="item" active-class="active">
                             <i class="book icon"></i>
                             Diary
-                        </a>
-                        <a class="item">
+                        </router-link>
+                        <router-link to="/foods" class="item" active-class="active">
                             <i class="food icon"></i>
                             Foods
-                        </a>
-                        <a class="item">
+                        </router-link>
+                        <router-link to="/profile" class="item" active-class="active">
                             <i class="settings icon"></i>
                             Profile
-                        </a>
+                        </router-link>
                     </div>
                 </div>
             </div>
