@@ -70,7 +70,6 @@ export default {
                 { id: 2, name: 'Lunch' },
                 { id: 3, name: 'Dinner' }
             ],
-            foods: [],
             selectedMeal: null,
             selectedFood: null,
             selectedQuantity: 0,
@@ -79,6 +78,7 @@ export default {
     },
     computed: {
         ...mapGetters({
+            foods: 'getAvailableFoods',
             selectedCalendarDate: 'getSelectedCalendarDate'
         }),
         totalServingSize() {
@@ -111,11 +111,6 @@ export default {
         setSelectedFood(food) {
             this.selectedFood = food;
         },
-    },
-    created() {
-        this.$http.get('foods').then(response => {
-            this.foods = response.body._embedded.items;
-        });
     },
 }
 </script>

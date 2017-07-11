@@ -28,6 +28,7 @@ export default {
         }
     },
     mounted() {
+        this.$store.dispatch('requestFoodList');
         this.$store.commit('setSelectedCalendarDate', moment());
         this.jQuery('.ui.modal').modal();
         this.jQuery('.ui.dropdown').dropdown();

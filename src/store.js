@@ -5,18 +5,29 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
+    availableFoods: [],
     selectedCalendarDate: moment()
 };
 
 const getters = {
+    getAvailableFoods: state => state.availableFoods,
     getSelectedCalendarDate: state => state.selectedCalendarDate
 };
 
 const actions = {
+    requestFoodList ({ commit }) {
+        Vue.http.get('foods').then(response => {
+            console.log(response.body._embedded.items);
+            commit('setAvailableFoods', response.body._embedded.items);
+        });
+    }
 };
 
 const mutations = {
-    setSelectedCalendarDate(state, date) {
+    setAvailableFoods (state, foods = []) {
+        state.availableFoods = foods;
+    },
+    setSelectedCalendarDate (state, date = moment()) {
         state.selectedCalendarDate = date;
     }
 };
