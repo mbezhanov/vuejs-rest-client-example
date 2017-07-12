@@ -17,7 +17,6 @@ const getters = {
 const actions = {
     requestFoodList ({ commit }) {
         Vue.http.get('foods').then(response => {
-            console.log(response.body._embedded.items);
             commit('setAvailableFoods', response.body._embedded.items);
         });
     }
