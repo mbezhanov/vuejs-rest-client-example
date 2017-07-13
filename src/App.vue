@@ -22,16 +22,9 @@ export default {
     components: {
         'app-menu': Menu,
     },
-    data() {
-        return {
-            jQuery: window.jQuery
-        }
-    },
     mounted() {
         this.$store.dispatch('requestFoodList');
         this.$store.commit('setSelectedCalendarDate', moment());
-        this.jQuery('.ui.modal').modal();
-        this.jQuery('.ui.dropdown').dropdown();
     }
 }
 </script>
@@ -42,5 +35,10 @@ export default {
 }
 .fade-enter, .fade-leave-to {
     opacity: 0 !important;
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
 }
 </style>

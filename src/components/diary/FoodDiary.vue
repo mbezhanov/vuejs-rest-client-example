@@ -41,34 +41,37 @@
                 </tfoot>
             </table>
         </div>
-        <div id="confirm-delete-modal" class="ui small basic test modal">
-            <div class="ui icon header">
+        <semantic-ui-modal v-if="shouldShowModal" :basic="true" :closable="false" :active="true">
+            <template slot="header" v-if="!shouldShowLoader">
                 <i class="book icon"></i>
-                Delete Diary Entry
-            </div>
-            <div class="content">
-                <p>Are you sure you want to delete this entry from the diary?</p>
-            </div>
-            <div class="actions">
-                <div class="ui red basic cancel inverted button">
+                <p>Delete Diary Entry</p>
+            </template>
+            <div class="centered" v-if="!shouldShowLoader">Are you sure you want to delete this entry from the diary?</div>
+            <div class="ui large text loader" v-else>Loading</div>
+            <template slot="actions" v-if="!shouldShowLoader">
+                <div class="ui red basic cancel inverted button" @click="onModalCancelButtonClicked">
                     <i class="remove icon"></i>
                     No
                 </div>
-                <div class="ui green ok inverted button">
+                <div class="ui green ok inverted button" @click="onModalSubmitButtonClicked">
                     <i class="checkmark icon"></i>
                     Yes
                 </div>
-            </div>
-        </div>
+            </template>
+        </semantic-ui-modal>
     </div>
 </template>
 
 <script>
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment';
+import { Modal } from 'semantic-ui-vue2';
 import { mapGetters } from 'vuex';
 
 export default {
+    components: {
+        'semantic-ui-modal': Modal
+    },
     data() {
         return {
             meals: {
@@ -76,7 +79,9 @@ export default {
                 lunch: [],
                 dinner: []
             },
-            jQuery: window.jQuery
+            selectedFood: null,
+            shouldShowModal: false,
+            shouldShowLoader: false
         };
     },
     computed: {
@@ -137,20 +142,46 @@ export default {
             return item.food;
         },
         onRemoveRequest(food) {
-            jQuery('#confirm-delete-modal').modal('setting', 'closable', false)
-                .modal('setting', 'onApprove', () => {
-                    this.$http.delete(`diary/${food.diary_id}`).then(() => {
-                        this.$emit('diaryEntryRemoved');
-                    });
-                })
-                .modal('show');
+            this.selectedFood = food;
+            this.shouldShowModal = true;
+        },
+        onModalCancelButtonClicked() {
+            this.selectedFood = null;
+            this.shouldShowModal = false;
+        },
+        onModalSubmitButtonClicked() {
+            this.shouldShowLoader = true;
+            this.$http.delete(`diary/${this.selectedFood.diary_id}`).then(() => {
+                this.$emit('diaryEntryRemoved');
+                this.selectedFood = null;
+                this.shouldShowModal = false;
+                this.shouldShowLoader = false;
+            });
         }
     },
 }
 </script>
 
 <style scoped>
-    .meal-wrapper {
-        margin-bottom: 14px;
-    }
+.meal-wrapper {
+    margin-bottom: 14px;
+}
+.centered {
+    text-align: center;
+}
+.modal .header p {
+    text-align: center;
+}
+.modal .header .icon {
+    float: none;
+    display: block;
+    width: auto;
+    height: auto;
+    line-height: 1;
+    padding: 0;
+    font-size: 3em;
+    margin: 0 auto .5rem;
+    opacity: 1;
+    vertical-align: middle;
+}
 </style>

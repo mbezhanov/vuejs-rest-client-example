@@ -1,77 +1,73 @@
 <template>
-    <div id="add-food">
+    <div>
         <p></p>
-        <button class="ui olive fluid right labeled icon button" @click="handleButtonClick">
+        <button class="ui olive fluid right labeled icon button" @click="shouldShowModal = true">
             <i class="plus icon"></i>
             Add Food
         </button>
-        <div id="add-food-form" class="ui modal">
-            <i class="close icon"></i>
-            <div class="header">
-                Add Food
-            </div>
-            <div class="content">
-                <form class="ui form" @submit.prevent.stop="handleFormSubmission">
-                    <div class="field">
-                        <div class="field">
-                            <label>Meal</label>
-                            <div class="ui selection dropdown">
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Meal</div>
-                                <div class="menu">
-                                    <div class="item" v-for="meal in meals" :data-value="meal.id" @click="setSelectedMeal(meal)">
-                                        {{ meal.name }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="field">
-                            <label>Food</label>
-                            <div class="ui selection dropdown">
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Food</div>
-                                <div class="menu">
-                                    <div class="item" v-for="food in foods" :data-value="food.id" @click="setSelectedFood(food)">
-                                        {{ `${food.name} (${food._embedded.manufacturer.name})` }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label>
-                            Quantity
-                            <template v-if="selectedFood">
-                                {{ selectedQuantity }} x {{ selectedFood.serving_size }} = {{ totalServingSize }}
-                            </template>
-                        </label>
-                        <input type="text" name="quantity" placeholder="Quantity" v-model.number="selectedQuantity">
-                    </div>
-                    <button class="ui button" type="submit">Add</button>
-                </form>
-            </div>
-        </div>
+        <semantic-ui-modal v-if="shouldShowModal" :active="true">
+            <template slot="header">Add Food</template>
+            <form class="ui form" @submit.prevent.stop="handleFormSubmission">
+                <div class="field">
+                    <label>Meal</label>
+                    <semantic-ui-dropdown
+                            :selection="true"
+                            :fluid="true"
+                            text="Meal"
+                            :items="meals"
+                            v-model="selectedMealId"
+                    ></semantic-ui-dropdown>
+                </div>
+                <div class="field">
+                    <label>Food</label>
+                    <semantic-ui-dropdown
+                            :selection="true"
+                            :fluid="true"
+                            text="Food"
+                            :items="foodDropdownItems"
+                            v-model="selectedFoodId"
+                    ></semantic-ui-dropdown>
+                </div>
+                <div class="field">
+                    <label>
+                        Quantity
+                        <template v-if="selectedFoodId">
+                            {{ selectedQuantity }} x {{ selectedFoodServingSize}} = {{ totalServingSize }}
+                        </template>
+                    </label>
+                    <input type="text" name="quantity" placeholder="Quantity" v-model.number="selectedQuantity">
+                </div>
+                <button class="ui button" type="submit">Add</button>
+            </form>
+        </semantic-ui-modal>
     </div>
 </template>
 
 <script>
+import find from 'lodash/find';
+import map from 'lodash/map';
 import split from 'lodash/split';
+import { Dropdown } from 'semantic-ui-vue2';
+import { Modal } from 'semantic-ui-vue2';
 import { mapGetters } from 'vuex';
 
 export default {
+    components: {
+        'semantic-ui-dropdown': Dropdown,
+        'semantic-ui-modal': Modal
+    },
     data() {
         return {
             meals: [
-                { id: 1, name: 'Breakfast' },
-                { id: 2, name: 'Lunch' },
-                { id: 3, name: 'Dinner' }
+                { name: 'Breakfast', text: 'Breakfast', value: 1 },
+                { name: 'Lunch', text: 'Lunch', value: 2 },
+                { name: 'Dinner', text: 'Dinner', value: 3 }
             ],
-            selectedMeal: null,
-            selectedFood: null,
+            selectedMealId: null,
+            selectedFoodId: null,
             selectedQuantity: 0,
-            jQuery: window.jQuery
+            shouldShowModal: false,
+            modalCachedSizes: null
         }
     },
     computed: {
@@ -79,42 +75,39 @@ export default {
             foods: 'getAvailableFoods',
             selectedCalendarDate: 'getSelectedCalendarDate'
         }),
+        foodDropdownItems() {
+            return map(this.foods, food => {
+                return {
+                    name: `${food.name} (${food._embedded.manufacturer.name})`,
+                    text: `${food.name} (${food._embedded.manufacturer.name})`,
+                    value: food.id
+                }
+            });
+        },
+        selectedFoodServingSize() {
+            const food = find(this.foods, food => food.id === this.selectedFoodId);
+            return food.serving_size;
+        },
         totalServingSize() {
-            const [ servingSize, measurement ] = split(this.selectedFood.serving_size, ' ');
+            const [ servingSize, measurement ] = split(this.selectedFoodServingSize, ' ');
             return (this.selectedQuantity * servingSize) + ' ' + measurement;
         }
     },
     methods: {
-        handleButtonClick() {
-            this.jQuery('#add-food-form').modal('show');
-        },
         handleFormSubmission() {
             this.$http.post('diary', {
                 date: this.selectedCalendarDate.format('YYYY-MM-DD'),
-                meal_id: this.selectedMeal.id,
-                food_id: this.selectedFood.id,
+                meal_id: this.selectedMealId,
+                food_id: this.selectedFoodId,
                 quantity: this.selectedQuantity
             }).then(() => {
-                this.selectedMeal = null;
-                this.selectedFood = null;
+                this.selectedMealId = null;
+                this.selectedFoodId = null;
                 this.selectedQuantity = null;
-                this.jQuery('#add-food-form').modal('hide');
-                this.jQuery('.ui.dropdown').dropdown('clear');
+                this.shouldShowModal = false;
                 this.$emit('foodAdded');
             });
-        },
-        setSelectedMeal(meal) {
-            this.selectedMeal = meal;
-        },
-        setSelectedFood(food) {
-            this.selectedFood = food;
-        },
+        }
     },
 }
 </script>
-
-<style scoped>
-#add-food {
-    margin-bottom: 14px;
-}
-</style>
