@@ -17,6 +17,7 @@
 
 <script>
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 import AddFood from './diary/AddFood.vue';
 import Calendar from './diary/Calendar.vue';
 import CaloriesCounter from './diary/CaloriesCounter.vue';
@@ -34,18 +35,27 @@ export default {
             totalCaloriesConsumed: 0
         }
     },
+    computed: {
+        ...mapGetters({
+            selectedCalendarDate: 'getSelectedCalendarDate'
+        })
+    },
     methods: {
         onDiaryEntryRemoved() {
             // simulate date change, in order to trigger re-rendering of calendar and diary
-            this.$store.commit('setSelectedCalendarDate', moment(this.$store.state.selectedCalendarDate));
+            this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate));
         },
         onFoodAdded() {
             // simulate date change, in order to trigger re-rendering of calendar and diary
-            this.$store.commit('setSelectedCalendarDate', moment(this.$store.state.selectedCalendarDate));
+            this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate));
         },
         onCaloriesCountChanged(totalCaloriesConsumed) {
             this.totalCaloriesConsumed = totalCaloriesConsumed;
         }
     },
+    activated() {
+        // simulate date change, in order to trigger re-rendering of calendar and diary
+        this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate));
+    }
 }
 </script>

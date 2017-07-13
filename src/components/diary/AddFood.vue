@@ -16,7 +16,6 @@
                         <div class="field">
                             <label>Meal</label>
                             <div class="ui selection dropdown">
-                                <input type="hidden" name="gender">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Meal</div>
                                 <div class="menu">
@@ -31,12 +30,11 @@
                         <div class="field">
                             <label>Food</label>
                             <div class="ui selection dropdown">
-                                <input type="hidden" name="gender">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Food</div>
                                 <div class="menu">
                                     <div class="item" v-for="food in foods" :data-value="food.id" @click="setSelectedFood(food)">
-                                        {{ `${food.name} (${food.manufacturer.name})` }}
+                                        {{ `${food.name} (${food._embedded.manufacturer.name})` }}
                                     </div>
                                 </div>
                             </div>

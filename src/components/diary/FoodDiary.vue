@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="food in foods">
-                        <td>{{ `${food.name} (${food.manufacturer.name})` }}</td>
+                        <td>{{ `${food.name} (${food._embedded.manufacturer.name})` }}</td>
                         <td>{{ food.serving_size }}</td>
                         <td>{{ food.calories }}</td>
                         <td>{{ food.carbs }}</td>
