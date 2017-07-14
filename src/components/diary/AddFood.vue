@@ -5,7 +5,7 @@
             <i class="plus icon"></i>
             Add Food
         </button>
-        <semantic-ui-modal v-if="shouldShowModal" :active="true">
+        <semantic-ui-modal v-if="shouldShowModal" :active="true" @hidden="onModalClose">
             <template slot="header">Add Food</template>
             <form class="ui form" @submit.prevent.stop="handleFormSubmission">
                 <div class="field">
@@ -47,8 +47,7 @@
 import find from 'lodash/find';
 import map from 'lodash/map';
 import split from 'lodash/split';
-import { Dropdown } from 'semantic-ui-vue2';
-import { Modal } from 'semantic-ui-vue2';
+import { Dropdown, Modal } from 'semantic-ui-vue2';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -103,11 +102,17 @@ export default {
             }).then(() => {
                 this.selectedMealId = null;
                 this.selectedFoodId = null;
-                this.selectedQuantity = null;
+                this.selectedQuantity = 0;
                 this.shouldShowModal = false;
                 this.$emit('foodAdded');
             });
-        }
+        },
+        onModalClose() {
+            this.selectedMealId = null;
+            this.selectedFoodId = null;
+            this.selectedQuantity = 0;
+            this.shouldShowModal = false;
+        },
     },
 }
 </script>

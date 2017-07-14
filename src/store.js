@@ -22,12 +22,12 @@ const getters = {
 
 const actions = {
     requestFoodList({ commit }) {
-        Vue.http.get('foods').then(response => {
+        Vue.http.get('foods?limit=100').then(response => {
             commit('setAvailableFoods', response.body._embedded.items);
         });
     },
     requestManufacturerList({ commit }) {
-        Vue.http.get('manufacturers?limit=50').then(response => {
+        Vue.http.get('manufacturers?limit=100').then(response => {
             commit('setManufacturers', response.body._embedded.items);
         });
     },
