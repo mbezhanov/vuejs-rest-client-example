@@ -17,12 +17,30 @@
                             <i class="settings icon"></i>
                             Profile
                         </router-link>
+                        <div class="right item">
+                            <div class="middle aligned content">
+                                <a href="#" class="ui inverted button" @click="onLogoutClicked">
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    methods: {
+        onLogoutClicked() {
+            localStorage.removeItem('authToken');
+            this.$store.commit('setIsAuthenticated', false);
+        }
+    }
+}
+</script>
 
 <style scoped>
     #menu {

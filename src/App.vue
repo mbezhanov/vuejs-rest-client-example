@@ -1,30 +1,32 @@
 <template>
     <div>
-        <app-menu></app-menu>
-        <div class="ui grid container">
-            <div class="row">
-                <div class="column"><!-- this row intentionally left blank --></div>
-            </div>
-            <transition name="fade" mode="out-in">
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
-            </transition>
-        </div>
+        <transition name="fade" mode="out-in" appear>
+            <app-login v-if="!isAuthenticated" @loggedIn="onSuccessfulLogin"></app-login>
+            <app-dashboard v-else></app-dashboard>
+        </transition>
     </div>
 </template>
 
 <script>
-import Menu from './components/Menu.vue';
-import moment from 'moment';
+import { mapGetters } from 'vuex';
+import Login from './components/Login.vue';
+import Dashboard from './components/Dashboard.vue'
 
 export default {
     components: {
-        'app-menu': Menu,
+        'app-dashboard': Dashboard,
+        'app-login': Login
     },
-    mounted() {
-        this.$store.dispatch('requestFoodList');
-        this.$store.commit('setSelectedCalendarDate', moment());
+    computed: {
+        ...mapGetters({
+            isAuthenticated: 'getIsAuthenticated'
+        })
+    },
+    methods: {
+        onSuccessfulLogin(authToken) {
+            localStorage.setItem('authToken', authToken);
+            this.$store.commit('setIsAuthenticated', true);
+        }
     }
 }
 </script>
@@ -36,9 +38,10 @@ export default {
 .fade-enter, .fade-leave-to {
     opacity: 0 !important;
 }
-.modal {
+.modal, #login {
     position: fixed;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 </style>

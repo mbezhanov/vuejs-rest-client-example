@@ -7,6 +7,7 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
+    isAuthenticated: false,
     availableFoods: [],
     selectedCalendarDate: moment()
 };
@@ -17,6 +18,9 @@ const getters = {
     getManufacturers: state => state.manufacturers,
     getManufacturerById: state => id => {
         return find(state.manufacturers, manufacturer => manufacturer.id === id);
+    },
+    getIsAuthenticated: state => {
+        return state.isAuthenticated;
     }
 };
 
@@ -39,6 +43,9 @@ const actions = {
 };
 
 const mutations = {
+    setIsAuthenticated(state, isAuthenticated) {
+        state.isAuthenticated = isAuthenticated;
+    },
     setAvailableFoods(state, foods = []) {
         state.availableFoods = foods;
     },
