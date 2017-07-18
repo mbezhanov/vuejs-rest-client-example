@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Apply patches
+          command: patch -p1 < patch/semantic-ui-vue2.patch
+      - run:
+          name: Build application
+          command: npm run build
+      - deploy:
+          name: Deploy to Production
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ssh-keyscan -H ${DEPLOY_SERVER} >> ~/.ssh/known_hosts
+              scp -C ~/app/index.html ${DEPLOY_USER}@${DEPLOY_SERVER}:${DEPLOY_DIR}/.
+              scp -Cr ~/app/dist ${DEPLOY_USER}@${DEPLOY_SERVER}:${DEPLOY_DIR}/dist/.
+            fi

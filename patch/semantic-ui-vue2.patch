@@ -1,0 +1,32 @@
+diff -ruN ../node_modules/semantic-ui-vue2/src/modules/Dropdown.vue semantic-ui-vue2/src/modules/Dropdown.vue
+--- ../node_modules/semantic-ui-vue2/src/modules/Dropdown.vue	2017-06-28 00:00:07.000000000 +0300
++++ semantic-ui-vue2/src/modules/Dropdown.vue	2017-07-18 11:52:26.896119347 +0300
+@@ -1,6 +1,7 @@
+ <template>
+     <div
+         v-bind:class="[
++            {fluid},
+             {visible},
+             'ui',
+             {active},
+@@ -50,7 +51,7 @@
+                                     'item'
+                                 ]"
+                                 v-bind:tabindex="(index + 2) * -1"
+-                                v-on:focus="setSelected(item)"
++                                v-on:click.stop="setSelected(item)"
+                                 v-for="(item, index) in $items">
+                                 {{ item.name ? item.name : item.value }}
+                             </div>
+@@ -119,6 +120,11 @@
+                         noResults: 'No results found.'
+                     }
+                 }
++            },
++            fluid: {
++                type: Boolean,
++                required: false,
++                default: false
+             }
+         },
+         data() {

@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var DotenvPlugin = require('webpack-dotenv-plugin')
 
 module.exports = {
   entry: './src/main.js',
@@ -22,7 +23,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        include: [/src/, /node_modules\/semantic-ui-vue2/],
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -47,6 +48,13 @@ module.exports = {
   },
   devtool: '#eval-source-map'
 }
+
+module.exports.plugins = (module.exports.plugins || []).concat([
+  new DotenvPlugin({
+    sample: './.env.dist',
+    path: './.env'
+  })
+]);
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'

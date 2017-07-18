@@ -6,7 +6,7 @@ import store from './store';
 
 Vue.use(VueResource);
 
-Vue.http.options.root = 'http://app.local:8081/';
+Vue.http.options.root = process.env.API_URL;
 Vue.http.interceptors.push((request, next) => {
     const authToken = localStorage.getItem('authToken');
     if (authToken !== null) {
