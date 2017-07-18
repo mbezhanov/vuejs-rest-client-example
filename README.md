@@ -1,18 +1,15 @@
-# vue-rest-client-example
+# vuejs-rest-client-example
 
-> A Vue.js REST Client example
+An example [Vue.js](https://vuejs.org/) application that communicates with a [RESTful API](https://github.com/mbezhanov/silex-rest-api-example)
 
-## Build Setup
+Frameworks, Tools & Libraries used:
+- [Vue.js](https://vuejs.org/)
+- [Lodash](https://lodash.com/)
+- [Moment.js](https://momentjs.com/)
+- [Semantic UI](https://semantic-ui.com/)
+- [Webpack](https://webpack.js.org/)
 
-``` bash
-# install dependencies
-npm install
+Test at: http://marinbezhanov.com/demo/vuejs-rest-client-example
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+- username: test
+- password: test
