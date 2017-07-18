@@ -56,7 +56,7 @@ const mutations = {
         state.manufacturers = manufacturers;
     },
     updateFood(state, newFood) {
-        const index = findIndex(state.availableFoods, oldFood => oldFood.id == newFood.id);
+        const index = findIndex(state.availableFoods, oldFood => oldFood.id === newFood.id);
         state.availableFoods.splice(index, 1, newFood);
     }
 };

@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="ui active inverted dimmer" v-if="isLoading">
+            <div class="ui text loader">Loading...</div>
+        </div>
         <transition name="fade" mode="out-in" appear>
             <div class="ui positive message" v-if="shouldShowPositiveMessage" key="positive">
                 Food {{ this.isCreatingNewRecord ? 'created' : 'updated' }} successfully.
@@ -106,6 +109,7 @@ export default {
         return {
             error: null,
             isEditing: false,
+            isLoading: false,
             selectedManufacturerId: null,
             shouldShowPositiveMessage: false,
             shouldShowNegativeMessage: false
@@ -147,6 +151,8 @@ export default {
                 return;
             }
 
+            this.isLoading = true;
+
             const payload = {
                 manufacturer_id: this.selectedManufacturerId,
                 servingSize: this.food.serving_size,
@@ -160,12 +166,10 @@ export default {
                 payload.name = this.food.name;
             }
 
-            const successHandler = () => {
-
-            };
             const errorHandler = error => {
                 this.error = error.body;
                 this.shouldShowNegativeMessage = true;
+                this.isLoading = false;
             };
 
             if (this.isCreatingNewRecord) {
@@ -174,6 +178,7 @@ export default {
                     this.food._embedded.manufacturer = this.manufacturer(this.selectedManufacturerId);
                     this.$store.dispatch('requestFoodList');
                     this.$emit('newFoodAdded');
+                    this.isLoading = false;
                 }, errorHandler);
             } else if (this.isEditing) {
                 this.$http.patch(`foods/${this.food.id}`, payload).then(() => {
@@ -181,6 +186,7 @@ export default {
                     this.shouldShowPositiveMessage = true;
                     this.food._embedded.manufacturer = this.manufacturer(this.selectedManufacturerId);
                     this.$store.dispatch('updateFoodInformation', this.food.id);
+                    this.isLoading = false;
                 }, errorHandler);
             }
         },

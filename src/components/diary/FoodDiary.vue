@@ -1,43 +1,46 @@
 <template>
     <div>
+        <div class="ui active inverted dimmer" v-if="isLoading">
+            <div class="ui text loader">Loading...</div>
+        </div>
         <div class="meal-wrapper" v-for="(foods, mealName) in meals">
             <h2>{{ ucfirst(mealName) }}</h2>
             <table class="ui small compact orange celled table">
                 <thead>
-                    <tr>
-                        <th>Food</th>
-                        <th>Amount</th>
-                        <th>Calories (kcal)</th>
-                        <th>Carbs (g)</th>
-                        <th>Fat (g)</th>
-                        <th>Protein (g)</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th>Food</th>
+                    <th>Amount</th>
+                    <th>Calories (kcal)</th>
+                    <th>Carbs (g)</th>
+                    <th>Fat (g)</th>
+                    <th>Protein (g)</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="food in foods">
-                        <td>{{ `${food.name} (${food._embedded.manufacturer.name})` }}</td>
-                        <td>{{ food.serving_size }}</td>
-                        <td>{{ food.calories }}</td>
-                        <td>{{ food.carbs }}</td>
-                        <td>{{ food.fat }}</td>
-                        <td>{{ food.protein }}</td>
-                        <td class="center aligned">
-                            <a href="#" @click.prevent.stop="onRemoveRequest(food)">
-                                <i class="red remove icon"></i>
-                            </a>
-                        </td>
-                    </tr>
+                <tr v-for="food in foods">
+                    <td>{{ `${food.name} (${food._embedded.manufacturer.name})` }}</td>
+                    <td>{{ food.serving_size }}</td>
+                    <td>{{ food.calories }}</td>
+                    <td>{{ food.carbs }}</td>
+                    <td>{{ food.fat }}</td>
+                    <td>{{ food.protein }}</td>
+                    <td class="center aligned">
+                        <a href="#" @click.prevent.stop="onRemoveRequest(food)">
+                            <i class="red remove icon"></i>
+                        </a>
+                    </td>
+                </tr>
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <th colspan="2">Total</th>
-                        <th>{{ getTotal(mealName, 'calories') }}</th>
-                        <th>{{ getTotal(mealName, 'carbs') }}</th>
-                        <th>{{ getTotal(mealName, 'fat') }}</th>
-                        <th>{{ getTotal(mealName, 'protein') }}</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th colspan="2">Total</th>
+                    <th>{{ getTotal(mealName, 'calories') }}</th>
+                    <th>{{ getTotal(mealName, 'carbs') }}</th>
+                    <th>{{ getTotal(mealName, 'fat') }}</th>
+                    <th>{{ getTotal(mealName, 'protein') }}</th>
+                    <th></th>
+                </tr>
                 </tfoot>
             </table>
         </div>
@@ -74,6 +77,7 @@ export default {
     },
     data() {
         return {
+            isLoading: false,
             meals: {
                 breakfast: [],
                 lunch: [],
@@ -95,6 +99,8 @@ export default {
             const lunch = [];
             const dinner = [];
 
+            this.isLoading = true;
+
             this.$http.get(`diary/${date.year()}/${date.format('MM')}/${date.format('DD')}`).then(response => {
                 let totalCaloriesConsumed = 0;
 
@@ -112,6 +118,7 @@ export default {
                 }
 
                 this.$emit('caloriesCountChanged', totalCaloriesConsumed);
+                this.isLoading = false;
             });
 
             this.meals.breakfast = breakfast;

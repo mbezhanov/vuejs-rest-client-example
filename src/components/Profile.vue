@@ -1,6 +1,9 @@
 <template>
     <div class="row">
         <div class="sixteen wide column">
+            <div class="ui active inverted dimmer" v-if="isLoading">
+                <div class="ui text loader">Loading...</div>
+            </div>
             <form class="ui form" @submit.prevent.stop="onFormSubmit">
                 <transition name="fade" mode="out-in" appear>
                     <div class="ui info message" v-if="!hasError && !success" key="info">
@@ -41,7 +44,8 @@ export default {
             error: null,
             currentPassword: '',
             newPassword: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            isLoading: false
         }
     },
     computed: {
@@ -58,17 +62,21 @@ export default {
                 return;
             }
 
+            this.isLoading = true;
+
             const payload = {
                 old_password: this.currentPassword,
                 new_password: this.newPassword
             };
 
-            this.$http.post('profile', payload).then(response => {
+            this.$http.post('profile', payload).then(() => {
                 this.success = true;
                 this.error = null;
+                this.isLoading = false;
             }, error => {
                 this.success = false;
                 this.error = error.body;
+                this.isLoading = false;
             });
         }
     },
