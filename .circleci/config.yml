@@ -20,6 +20,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               ssh-keyscan -H ${DEPLOY_SERVER} >> ~/.ssh/known_hosts
+              sed -i 's/\/dist\///g' dist/styles.css
               sed -i 's/\/dist/\.\/dist/g' index.html
               scp -C ~/app/index.html ${DEPLOY_USER}@${DEPLOY_SERVER}:${DEPLOY_DIR}/.
               scp -Cr ~/app/dist ${DEPLOY_USER}@${DEPLOY_SERVER}:${DEPLOY_DIR}/.

@@ -3,6 +3,7 @@ import VueResource from 'vue-resource';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import '../node_modules/semantic-ui-css/semantic.min.css';
 
 Vue.use(VueResource);
 
