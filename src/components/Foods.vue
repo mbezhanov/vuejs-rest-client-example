@@ -93,6 +93,7 @@ export default {
             this.selectedFood = null;
         },
         onFoodItemClick(food) {
+            this.isCreatingNewRecord = false;
             (this.selectedFood === food) ? this.selectedFood = null : this.selectedFood = food;
         },
         onNewFoodAdded() {

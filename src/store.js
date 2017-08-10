@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 const state = {
     isAuthenticated: false,
+    authErrorMessage: '',
     availableFoods: [],
     selectedCalendarDate: moment()
 };
@@ -39,12 +40,20 @@ const actions = {
         Vue.http.get(`foods/${foodId}`).then(response => {
             commit('updateFood', response.body);
         });
+    },
+    renewToken({ commit }, oldAuthToken) {
+        console.log('renew token');
+        Vue.http.post('login/renew', { token: oldAuthToken }).then(response => {
+            localStorage.setItem('authToken', response.body.authToken);
+            commit('setIsAuthenticated', true);
+        });
     }
 };
 
 const mutations = {
     setIsAuthenticated(state, isAuthenticated) {
         state.isAuthenticated = isAuthenticated;
+        state.authErrorMessage = '';
     },
     setAvailableFoods(state, foods = []) {
         state.availableFoods = foods;

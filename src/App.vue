@@ -1,8 +1,10 @@
 <template>
     <div>
         <transition name="fade" mode="out-in" appear>
-            <app-login v-if="!isAuthenticated" @loggedIn="onSuccessfulLogin"></app-login>
-            <app-dashboard v-else></app-dashboard>
+            <keep-alive>
+                <app-login v-if="!isAuthenticated" @loggedIn="onSuccessfulLogin"></app-login>
+                <app-dashboard v-else></app-dashboard>
+            </keep-alive>
         </transition>
     </div>
 </template>

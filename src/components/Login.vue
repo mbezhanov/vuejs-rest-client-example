@@ -6,6 +6,7 @@
                     Log-in to your account
                 </div>
             </h2>
+            <div class="ui negative message" v-if="$store.state.authErrorMessage">{{ $store.state.authErrorMessage }}</div>
             <form class="ui large form">
                 <div class="ui segment">
                     <div class="field">
