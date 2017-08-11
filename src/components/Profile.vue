@@ -53,7 +53,7 @@ export default {
             return this.error !== null;
         },
         arePasswordsMatching() {
-            return (this.newPassword == this.confirmPassword) || (this.confirmPassword.length == 0);
+            return (this.newPassword === this.confirmPassword) || (this.confirmPassword.length === 0);
         }
     },
     methods: {
@@ -73,6 +73,9 @@ export default {
                 this.success = true;
                 this.error = null;
                 this.isLoading = false;
+                this.currentPassword = '';
+                this.newPassword = '';
+                this.confirmPassword = '';
             }, error => {
                 this.success = false;
                 this.error = error.body;

@@ -49,7 +49,7 @@ export default {
                 username: this.username,
                 password: this.password
             }).then(response => {
-                this.error = null;
+                this.error = this.username = this.password = null;
                 this.$emit('loggedIn', response.body.authToken);
             }, error => {
                 this.error = error.body;
